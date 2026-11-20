@@ -1,5 +1,6 @@
-// Remote MCP server (Streamable HTTP, stateless, no auth) for Vogue Paris 1920-1954, the issues
-// the BnF digitised on Gallica and vogue-paris.vercel.app mirrors. Free and read-only. Nothing
+// Paris Fashion Archive: a remote MCP server (Streamable HTTP, stateless, no auth) for the 1920-1954
+// issues of Vogue Paris that the BnF digitised on Gallica and vogue-paris.vercel.app mirrors.
+// Independent; not affiliated with Condé Nast or Vogue, so the listing never carries their name. Free and read-only. Nothing
 // is sold, nothing is stored, and the site itself is never changed by this project.
 //
 // Every answer carries reader links to vogue-paris.vercel.app (utm_source=mcp). Covers and
@@ -14,6 +15,7 @@ import {
   pageImage, summary, resolveIssue, substituted, filterIssues, yearsTable, fetchImage,
 } from "../lib/archive.js";
 
+const HOME = "https://vogue-paris-mcp.vercel.app";
 const PH_KEY = "phc_yFgRGppL6H7DvhgZTQKbHdrY5oqnpLT482rrNYtLqnAx"; // public project key, same project as appeal-the-denial
 const MAX_PAGES = 4;
 const MAX_COVERS = 12;
@@ -54,8 +56,11 @@ const READ_ONLY = { readOnlyHint: true, openWorldHint: false, destructiveHint: f
 
 function buildServer(meta = {}) {
   const pdYear = lastPublicDomainYear();
-  const server = new McpServer({ name: "vogue-paris", version: "1.0.0" }, {
-    instructions: `Vogue Paris, 1920-1954: the issues the Bibliothèque nationale de France digitised on Gallica, readable page by page at ${SITE}. find_issues lists issues by year, month or date range. look_at_covers and look_at_pages return the covers and pages as images for issues from ${pdYear} and earlier, which are in the US public domain; later issues are still under copyright, so for them the tools return the details and a reader link instead of images. Show reader links exactly as returned, in full. The magazine is in French. Source: gallica.bnf.fr / BnF.`,
+  const server = new McpServer({
+    name: "paris-fashion-archive", title: "Paris Fashion Archive", version: "1.0.0", websiteUrl: HOME,
+    icons: [{ src: `${HOME}/icon.png`, mimeType: "image/png", sizes: ["512x512"] }, { src: `${HOME}/favicon.svg`, mimeType: "image/svg+xml", sizes: ["any"] }],
+  }, {
+    instructions: `Paris Fashion Archive: the 1920-1954 issues of Vogue Paris that the Bibliothèque nationale de France digitised on Gallica, readable page by page at ${SITE}. Independent; not affiliated with Condé Nast or Vogue. find_issues lists issues by year, month or date range. look_at_covers and look_at_pages return the covers and pages as images for issues from ${pdYear} and earlier, which are in the US public domain; later issues are still under copyright, so for them the tools return the details and a reader link instead of images. Show reader links exactly as returned, in full. The magazine is in French. Source: gallica.bnf.fr / BnF.`,
   });
 
   server.registerTool("find_issues", {
@@ -158,7 +163,7 @@ function buildServer(meta = {}) {
 export default async function handler(req, res) {
   if (req.method === "GET" && !String(req.headers.accept || "").includes("text/event-stream")) {
     res.setHeader("content-type", "application/json");
-    return res.status(200).end(JSON.stringify({ name: "vogue-paris", transport: "streamable-http", endpoint: "/mcp", tools: ["find_issues", "look_at_covers", "look_at_pages"], site: SITE }));
+    return res.status(200).end(JSON.stringify({ name: "paris-fashion-archive", title: "Paris Fashion Archive", transport: "streamable-http", endpoint: "/mcp", tools: ["find_issues", "look_at_covers", "look_at_pages"], site: SITE }));
   }
   if (req.method !== "POST") {
     res.setHeader("allow", "POST");

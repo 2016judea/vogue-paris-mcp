@@ -3,8 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Vogue Paris in Claude</title>
-<meta name="description" content="A free Claude connector for Vogue Paris, 1920–1954: find any issue, and look at the covers and pages of the public-domain years.">
+<title>Paris Fashion Archive in Claude</title>
+<meta name="description" content="Paris Fashion Archive, a free Claude connector for the 1920–1954 issues of Vogue Paris that the Bibliothèque nationale de France digitised on Gallica. Independent; not affiliated with Condé Nast or Vogue.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Jost:wght@400;500&display=swap">
@@ -35,8 +38,8 @@ footer{margin-top:40px;font-size:13px;color:var(--muted)}
 <body>
 <main>
   <p class="kick">Free Claude connector</p>
-  <h1>Vogue Paris, <em>in Claude</em></h1>
-  <p class="lede">Ask Claude for any issue from 1920 to 1954. It can see the covers and pages of every issue up to 1930 and read the French to you.</p>
+  <h1>Paris Fashion <em>Archive</em></h1>
+  <p class="lede">Ask Claude for any issue of Vogue Paris from 1920 to 1954, the years the Bibliothèque nationale de France digitised on Gallica. It can see the covers and pages of every issue up to 1930 and read the French to you.</p>
   <div class="url"><code id="u">https://vogue-paris-mcp.vercel.app/mcp</code><button id="c" type="button">Copy</button></div>
   <ol>
     <li>In Claude, open <b>Settings → Connectors → Add custom connector</b>.</li>
@@ -44,7 +47,7 @@ footer{margin-top:40px;font-size:13px;color:var(--muted)}
     <li>Ask away.</li>
   </ol>
   <p class="ask">Try <q>Show me the covers from 1925</q> · <q>Translate the first pages of the June 1920 issue</q> · <q>What were the hats like in spring 1926?</q></p>
-  <footer>Every issue reads free at <a href="https://vogue-paris.vercel.app/?utm_source=mcp-page">vogue-paris.vercel.app</a>. Source: gallica.bnf.fr / Bibliothèque nationale de France. Issues after 1930 are still under US copyright, so the connector links to them instead of showing them. <a href="/privacy">Privacy</a>.</footer>
+  <footer>Every issue reads free at <a href="https://vogue-paris.vercel.app/?utm_source=mcp-page">vogue-paris.vercel.app</a>. Source: gallica.bnf.fr / Bibliothèque nationale de France. Issues after 1930 are still under US copyright, so the connector links to them instead of showing them. Independent; not affiliated with Condé Nast or Vogue. <a href="/privacy">Privacy</a>.</footer>
 </main>
 <script>
 document.getElementById('c').onclick=function(){var b=this;try{navigator.clipboard.writeText(document.getElementById('u').textContent).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1600)})}catch(e){}};

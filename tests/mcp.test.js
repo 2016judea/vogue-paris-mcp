@@ -41,6 +41,16 @@ test("three tools, each titled and read-only", async () => {
   for (const t of tools) { assert.ok(t.title); assert.equal(t.annotations.readOnlyHint, true); assert.equal(t.annotations.destructiveHint, false); }
 });
 
+// Directory filing (SUBMISSION.md): the listing is "Paris Fashion Archive", never Vogue's name, with the
+// non-affiliation line; tool descriptions describe and never instruct the model (compliance attestation).
+test("named Paris Fashion Archive, not affiliated, descriptions hold no instructions", async () => {
+  const init = (await rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } })).result;
+  assert.equal(init.serverInfo.title, "Paris Fashion Archive");
+  assert.match(init.instructions, /not affiliated with Condé Nast or Vogue/);
+  const { tools } = (await rpc("tools/list", {})).result;
+  for (const t of tools) assert.doesNotMatch(t.description, /\b(always|never|must|do not|don't|show|tell the user|you should)\b/i, t.name);
+});
+
 test("find_issues with no filters lists the years and marks post-1930 as link only", async () => {
   const r = await call("find_issues", {});
   const y1925 = r.structuredContent.years.find((y) => y.year === 1925), y1950 = r.structuredContent.years.find((y) => y.year === 1950);

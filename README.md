@@ -1,10 +1,11 @@
-# Vogue Paris MCP
+# Paris Fashion Archive
 
 **Live:** https://vogue-paris-mcp.vercel.app
 
-A free remote MCP server (Claude connector) for Vogue Paris, 1920–1954: the issues the BnF digitised on
-Gallica and [vogue-paris.vercel.app](https://vogue-paris.vercel.app) mirrors. Endpoint:
-`https://vogue-paris-mcp.vercel.app/mcp` (Streamable HTTP, stateless, no auth).
+A free remote MCP server (Claude connector) for the 1920–1954 issues of Vogue Paris that the Bibliothèque
+nationale de France digitised on Gallica, mirrored at [vogue-paris.vercel.app](https://vogue-paris.vercel.app).
+Endpoint: `https://vogue-paris-mcp.vercel.app/mcp` (Streamable HTTP, stateless, no auth).
+Independent; not affiliated with Condé Nast or Vogue. Directory listing kit: `SUBMISSION.md`.
 
 | Tool | Does |
 |---|---|
@@ -27,7 +28,7 @@ pages or covers. `publicDomainUS()` in `lib/archive.js` works out the line from 
   (`npm run snapshot` refreshes it). Images are fetched from the site's Vercel Blob and returned as
   base64 WebP.
 - This project never writes to the site. Reader links carry `utm_source=mcp`.
-- `public/`: the connect page and privacy policy.
+- `public/`: the connect page, privacy policy and icons (`icon.png` 512, `favicon.svg`, stroke-only `icon-composer.svg`).
 
     npm install && npm test
 
