@@ -105,3 +105,48 @@ are credited "Source: gallica.bnf.fr / BnF" in every page answer. The listing is
 after the magazine, because Vogue is Condé Nast's trademark; we are independent and not affiliated. No account, no
 stored data; one anonymous analytics event per tool call (privacy page). Test from a terminal with the curl in the
 repo's SUBMISSION.md, or `node scripts/live_cases.mjs`.
+
+## Submitted 2026-11-20
+
+Filed by Claude in Aidan's own Chrome (JXA by process id into one background tab; his active tab was put back, no
+window opened). A copied profile was not used: claude.ai signs it out on the first request. Nothing was paid, nothing
+was sent to a person. Status read back off the portal after filing.
+
+| Where | Status | UTC | Listing / ID |
+|---|---|---|---|
+| Claude Connectors Directory | **IN REVIEW** | 17:11 | claude.ai/directory/manage/paris-fashion-archive · slug `paris-fashion-archive` (permanent) |
+
+**What was filed.** Custom connector "Paris Fashion Archive" added to his Claude (Settings → Connectors): connected,
+3 tools, 0 resources, auth none, no tool flagged. Name, slug, one-liner and description verbatim from this kit.
+Categories: Media & Entertainment, Creative, Education. Author Brick and Mortar AI LLC
+(https://vogue-paris-mcp.vercel.app/). Custom icon `/icon.png` (512, previewed). Docs `/`, support the GitHub issues
+URL, privacy `/privacy`. Use cases: the three in this kit. Prerequisites: none. Read only. Company Brick and Mortar AI
+LLC, https://brickandmortar.dev, Aidan Jude, Founder, aidan@brickandmortar.dev (prefilled). Auth none (detected).
+Data handling: "We own the API" (vogue-paris.vercel.app and its Blob store), no health data, no sponsored content.
+Self-tested: every tool run through MCP Inspector CLI 0.17.2 against the live endpoint first (find_issues 1921 → 22
+issues; look_at_covers 1925 → 10 images; look_at_pages 1926-03-01 → 4 images; 1950-03-01 → 0 images, copyright note).
+All seven compliance boxes ticked after re-reading them and the directory policy; reviewer note as above.
+
+**Server changes made for this filing** (all deployed): the rename and icons (064e906); find_issues and
+look_at_covers name the nearest issue for a month with none, which test case 4 needed (6d87930); a troubleshooting
+line and support link on the connect page, because policy §3C asks docs to say how to troubleshoot (b946c41).
+
+**What needs Aidan.** Nothing yet. When it reads "Ready to publish", **Publish** at
+claude.ai/directory/manage/paris-fashion-archive (approval does not publish it); a follow-up is in
+`~/.claude/pending.json` (`paris-fashion-archive-directory`, due 2026-11-23). A domain stays his call.
+
+**For the next filing (form traps, 2026-11-20)**
+- **A background tab throttles in-page timers.** After the tab had sat hidden about ten minutes, a runner with
+  several `await sleep()` calls never resolved (its key stayed `pending`), though its clicks had landed. Do one
+  synchronous action per `execute` and wait in the shell between them.
+- **Step 4's use-case inputs carry no `type` attribute**, so `input[type=text]` matches nothing and the fill silently
+  does nothing. Filter on `el.type === "text"`, then read the values back.
+- **Step 8's box says "via MCP Inspector or as a custom connector in Claude"** and the review page prints "Tested with
+  MCP Inspector". Make it true first: `npx -y @modelcontextprotocol/inspector@0.17.2 --cli <url> --transport http
+  --method tools/call --tool-name <t> --tool-arg k=v` (in zsh, wrap it in a function; a `$I` string is not split).
+- Step 7 arrives with "We own the API" and health "No" preselected; "Sponsored content" has no default and must be set.
+- The directory policy (support.claude.com article 13145358) has no rule on listing names; the nearest is §2C, "must
+  not create confusion… with other Software", and §1F on IP. Naming the listing after the content's trademark is what
+  would invite confusion, which is why the name is ours.
+- Another session may be filing in the same Chrome at the same time: address your own tab by id and use your own
+  runner key (here `window.__vpm`).
