@@ -1,0 +1,9 @@
+{
+  "name": "vogue-paris-mcp",
+  "private": true,
+  "type": "module",
+  "description": "Free remote MCP server for Vogue Paris 1920-1954, the issues the BnF digitised on Gallica.",
+  "scripts": { "test": "node --test tests/*.test.js", "snapshot": "node scripts/snapshot.mjs" },
+  "dependencies": { "@modelcontextprotocol/sdk": "1.32.1", "zod": "4.6.5" },
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy · Vogue Paris in Claude</title>
+<style>
+:root{--wall:#e4e5e8;--ink:#1b1c21;--muted:#6b6d76;--rose:#b42f57}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--wall:#15161a;--ink:#ebe9e5;--muted:#9a9ba3;--rose:#e0628a}}
+:root[data-theme="dark"]{color-scheme:dark;--wall:#15161a;--ink:#ebe9e5;--muted:#9a9ba3;--rose:#e0628a}
+body{margin:0;background:var(--wall);color:var(--ink);font:400 16px/1.6 "Jost","Futura","Avenir Next","Helvetica Neue",sans-serif;padding:0 20px}
+main{max-width:600px;margin:0 auto;padding-block:48px}
+h1{font:400 34px/1.1 "Bodoni Moda","Didot","Bodoni 72",Georgia,serif}
+h2{font-size:17px;margin-top:28px}
+a{color:var(--rose)} p.m{color:var(--muted);font-size:14px}
+</style>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<main>
+<h1>Privacy</h1>
+<p class="m">Last updated November 20, 2026. Brick and Mortar AI LLC, Saint Paul, Minnesota.</p>
+<h2>No account, nothing stored</h2>
+<p>The connector needs no sign-in. It receives only what the assistant sends it: a year, a date range, an issue date or page numbers. It does not receive your conversation, and it keeps nothing.</p>
+<h2>What is counted</h2>
+<p>Each tool call sends one anonymous event to PostHog: which tool, whether it worked, how long it took, the year asked about, how many issues and images came back, and which app made the call (Claude, ChatGPT and so on, read from the user agent). Each event gets a random ID, so calls can't be linked to each other or to a person. No IP address is stored with it.</p>
+<p>These pages use Vercel Web Analytics, which counts visits without cookies.</p>
+<h2>Where the images come from</h2>
+<p>Covers and pages are scans from Gallica, the Bibliothèque nationale de France's digital library, served from <a href="https://vogue-paris.vercel.app">vogue-paris.vercel.app</a>. Images are returned only for issues in the US public domain. Later issues get a link instead.</p>
+<h2>Contact</h2>
+<p>aidan@brickandmortar.dev</p>
+</main>
+</body>
+</html>

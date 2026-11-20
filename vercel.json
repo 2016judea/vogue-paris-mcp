@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "outputDirectory": "public",
+  "buildCommand": "",
+  "rewrites": [{ "source": "/mcp", "destination": "/api/mcp" }],
+  "functions": { "api/mcp.js": { "maxDuration": 30 } },
+  "headers": [{ "source": "/api/(.*)", "headers": [{ "key": "cache-control", "value": "no-store" }] }]
+}
