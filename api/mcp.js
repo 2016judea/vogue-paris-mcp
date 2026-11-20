@@ -11,7 +11,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { z } from "zod";
 import {
   SITE, loadIssues, publicDomainUS, lastPublicDomainYear, pageCount, readerUrl, coverThumb,
-  pageImage, summary, resolveIssue, filterIssues, yearsTable, fetchImage,
+  pageImage, summary, resolveIssue, substituted, filterIssues, yearsTable, fetchImage,
 } from "../lib/archive.js";
 
 const PH_KEY = "phc_yFgRGppL6H7DvhgZTQKbHdrY5oqnpLT482rrNYtLqnAx"; // public project key, same project as appeal-the-denial
@@ -131,14 +131,15 @@ function buildServer(meta = {}) {
     const it = resolveIssue(all, issue);
     if (!it) return notFound(issue);
     const total = pageCount(it);
+    const note = substituted(issue, it);
     if (!publicDomainUS(it.year)) {
-      return { out: { content: [{ type: "text", text: notShown(it) }], structuredContent: { issue: summary(it), pages: [] } }, info: { year: it.year, n_issues: 1, n_images: 0, public_domain: false } };
+      return { out: { content: [{ type: "text", text: [note, notShown(it)].filter(Boolean).join(" ") }], structuredContent: { issue: summary(it), pages: [] } }, info: { year: it.year, n_issues: 1, n_images: 0, public_domain: false } };
     }
     const want = [...new Set(pages?.length ? pages : Array.from({ length: Math.min(MAX_PAGES, total) }, (_, k) => k + 1))];
     const bad = want.filter((n) => n > total);
     const ok = want.filter((n) => n <= total);
     const images = await Promise.all(ok.map((n) => fetchImage(pageImage(it, n)).catch(() => null)));
-    const content = [{ type: "text", text: `**${it.label}** (${it.date}) · ${total} pages · read it whole: ${readerUrl(it)}` }];
+    const content = [{ type: "text", text: `${note ? note + "\n" : ""}**${it.label}** (${it.date}) · ${total} pages · read it whole: ${readerUrl(it)}` }];
     ok.forEach((n, k) => {
       content.push({ type: "text", text: `Page ${n} of ${total} · full scan: ${pageImage(it, n, "w2400")}` });
       if (images[k]) content.push(images[k]);

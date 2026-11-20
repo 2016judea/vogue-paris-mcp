@@ -95,3 +95,11 @@ test("one anonymous mcp_tool_call per call", async () => {
   assert.equal(e.properties.$process_person_profile, false);
   assert.deepEqual([e.properties.tool, e.properties.ok, e.properties.year, e.properties.client, e.properties.test], ["find_issues", true, 1921, "claude", true]);
 });
+
+test("a month with no issue gets the nearest issue, and says so", async () => {
+  const r = await call("look_at_pages", { issue: "1925-06", pages: [1] });
+  assert.equal(images(r).length, 1);
+  assert.match(text(r), /No issue is dated 1925-06; the nearest is .+ \(1925-0[57]-\d\d\)/);
+  const far = await call("look_at_pages", { issue: "1923-06", pages: [1] });
+  assert.equal(far.structuredContent.found, false);
+});
