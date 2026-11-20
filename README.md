@@ -31,6 +31,6 @@ pages or covers. `publicDomainUS()` in `lib/archive.js` works out the line from 
 
     npm install && npm test
 
-Deployed by CLI (`npx vercel deploy --prod`). Analytics: `ANALYTICS.md`.
+Deploys from git on push to master (Vercel project `vogue-paris-mcp`). Analytics: `ANALYTICS.md`.
 
 Source: gallica.bnf.fr / Bibliothèque nationale de France.
