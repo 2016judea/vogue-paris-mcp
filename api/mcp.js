@@ -12,7 +12,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { z } from "zod";
 import {
   SITE, loadIssues, publicDomainUS, lastPublicDomainYear, pageCount, readerUrl, coverThumb,
-  pageImage, summary, resolveIssue, substituted, filterIssues, yearsTable, fetchImage,
+  pageImage, summary, resolveIssue, substituted, filterIssues, yearsTable, fetchImage, nearestIssue,
 } from "../lib/archive.js";
 
 const HOME = "https://vogue-paris-mcp.vercel.app";
@@ -84,11 +84,16 @@ function buildServer(meta = {}) {
     }
     const hits = filterIssues(all, { year, month, from, to });
     const shown = hits.slice(0, limit);
+    // Nothing in a given month or date range (June 1925 has no issue): name the nearest issue instead.
+    const target = from || to ? (Date.parse(from || to) + Date.parse(to || from)) / 2 : year != null && month != null ? Date.UTC(year, month - 1, 15) : null;
+    const nearest = !hits.length && target != null ? nearestIssue(all, target) : null;
+    const asked = year != null && month != null && !from && !to ? new Date(target).toLocaleString("en-US", { month: "long", year: "numeric", timeZone: "UTC" }) : `${from || "…"} to ${to || "…"}`;
     const text = hits.length
       ? [`**${hits.length} issue${hits.length > 1 ? "s" : ""}**${hits.length > shown.length ? ` (first ${shown.length} shown)` : ""}:`, ...shown.map(line),
         ...(shown.some((i) => !publicDomainUS(i.year)) ? ["", `Issues after ${pdYear} are still under US copyright: read them on the site through the links above.`] : [])].join("\n")
+      : nearest ? `No issue falls in ${asked}. The nearest is:\n${line(nearest)}`
       : `No issues match. The archive covers ${all[0].year}-${all.at(-1).year} with gaps; call find_issues with no filters to see which years it holds.`;
-    return { out: { content: [{ type: "text", text }], structuredContent: { total: hits.length, issues: shown.map(summary) } }, info: { year, n_issues: hits.length } };
+    return { out: { content: [{ type: "text", text }], structuredContent: { total: hits.length, issues: shown.map(summary), ...(nearest ? { nearest: summary(nearest) } : {}) } }, info: { year, n_issues: hits.length } };
   }));
 
   server.registerTool("look_at_covers", {
@@ -104,12 +109,13 @@ function buildServer(meta = {}) {
   }, logged("look_at_covers", meta, async ({ year, from, to, issues: refs }) => {
     const all = await loadIssues();
     let picked = refs?.length ? refs.map((r) => resolveIssue(all, r)).filter(Boolean) : filterIssues(all, { year, from, to });
+    const notes = refs?.length ? refs.map((r) => substituted(r, resolveIssue(all, r))).filter(Boolean) : [];
     if (!refs?.length && year == null && from == null && to == null) picked = all.filter((i) => publicDomainUS(i.year));
     if (!picked.length) return notFound(refs?.join(", ") || year || `${from || ""}..${to || ""}`);
     const open = picked.filter((i) => publicDomainUS(i.year)).slice(0, MAX_COVERS);
     const closed = picked.filter((i) => !publicDomainUS(i.year));
     const images = await Promise.all(open.map((i) => fetchImage(coverThumb(i)).catch(() => null)));
-    const content = [];
+    const content = notes.length ? [{ type: "text", text: notes.join("\n") }] : [];
     open.forEach((it, k) => {
       content.push({ type: "text", text: `**${it.label}** (${it.date}) · read: ${readerUrl(it)}` });
       if (images[k]) content.push(images[k]);

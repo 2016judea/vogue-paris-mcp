@@ -113,3 +113,13 @@ test("a month with no issue gets the nearest issue, and says so", async () => {
   const far = await call("look_at_pages", { issue: "1923-06", pages: [1] });
   assert.equal(far.structuredContent.found, false);
 });
+
+test("find_issues and look_at_covers name the nearest issue for a month with none", async () => {
+  const f = await call("find_issues", { year: 1925, month: 6 });
+  assert.equal(f.structuredContent.total, 0);
+  assert.match(f.structuredContent.nearest.date, /^1925-0[57]-\d\d$/);
+  assert.match(text(f), /No issue falls in June 1925\. The nearest is:/);
+  const c = await call("look_at_covers", { issues: ["1925-06"] });
+  assert.match(text(c), /No issue is dated 1925-06; the nearest is/);
+  assert.equal(images(c).length, 1);
+});
