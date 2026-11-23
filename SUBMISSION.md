@@ -171,3 +171,20 @@ ZIP: `chatgpt-plugin.zip`, built by `python3 scripts/build_chatgpt_plugin.py --l
 | `can_i_use_vogue_images` | True | False | False | Works out US copyright status from the issue year by fixed rules; changes nothing and makes no outside request. |
 | `high_resolution_vogue_cover` | True | False | False | Reads issue details and returns scans hosted on our own reader for US public-domain issues; changes nothing and calls no third-party service. |
 <!-- /chatgpt-hints -->
+
+## xAI marketplace (Grok Bot, Cursor, Grok) — SUBMITTED 2026-11-23
+
+Filed 2026-11-23T02:26:26Z at x.ai/bot/marketplace/submit-a-plugin; the page answered "Thanks for submitting your plugin!".
+Status: pending review (xAI replies by email to the work address). Destinations ticked: Grok (coming soon), Grok Bot,
+Cursor. Org Brick and Mortar AI LLC, handle `brickandmortar`. Name Paris Fashion Archive. Website https://vogue-paris-mcp.vercel.app/.
+Logo https://vogue-paris-mcp.vercel.app/icon-solid.png (solid plate, 1:1). MCP URL https://vogue-paris-mcp.vercel.app/mcp (the URL, never a repo). Cursor's Publisher Terms §3.1
+bar charging users "directly or indirectly" through the plugin; the connector itself is free.
+
+Description (530 chars):
+
+> Our own page-by-page reader of the 1920-1954 issues of Vogue Paris that the Bibliothèque nationale de France digitised on Gallica, with every scan credited "Source: gallica.bnf.fr / BnF". Find issues by year, month, season or date, see the covers and pages of every issue from 1930 and earlier (US public domain), and have the French read and translated. For later issues, still under US copyright, it returns the details and a reader link instead of images. Independent; not affiliated with Condé Nast or Vogue, nor with the BnF.
+
+Testing (485 chars):
+
+> No account or credentials needed. Add the MCP URL as a remote server, then try: 1) "Which issues of Vogue Paris came out in 1925?" -> find_issues lists the 1925 issues with dates, page counts and reader links. 2) "Show me the Vogue Paris covers from 1925." -> look_at_covers returns the 1925 cover images with the Gallica / BnF credit. 3) "Can I use 1925 Vogue Paris covers in a print?" -> 1925 issues are US public domain since 1 January 2021 (17 U.S.C. 304), with the credit to give.
+
