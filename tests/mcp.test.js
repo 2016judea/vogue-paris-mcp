@@ -35,9 +35,10 @@ test("public-domain line: published in Y is US public domain from 1 Jan of Y + 9
   assert.equal(publicDomainUS(1931, in2027), true);
 });
 
-test("three tools, each titled and read-only", async () => {
+test("three engine tools plus seven theme doors, each titled and read-only", async () => {
   const { tools } = (await rpc("tools/list", {})).result;
-  assert.deepEqual(tools.map((t) => t.name).sort(), ["find_issues", "look_at_covers", "look_at_pages"]);
+  assert.deepEqual(tools.map((t) => t.name).sort(), ["can_i_use_vogue_images", "find_issues", "high_resolution_vogue_cover", "look_at_covers", "look_at_pages", "random_vintage_vogue_cover", "translate_vogue_page", "vogue_by_season", "vogue_cover_on_date", "vogue_covers_by_decade"]);
+  for (const t of tools) assert.equal(t.annotations.title, t.title, t.name);
   for (const t of tools) { assert.ok(t.title); assert.equal(t.annotations.readOnlyHint, true); assert.equal(t.annotations.destructiveHint, false); }
 });
 
@@ -122,4 +123,74 @@ test("find_issues and look_at_covers name the nearest issue for a month with non
   const c = await call("look_at_covers", { issues: ["1925-06"] });
   assert.match(text(c), /No issue is dated 1925-06; the nearest is/);
   assert.equal(images(c).length, 1);
+});
+
+// Theme doors (QUESTIONS.md, 2026-11-22).
+test("vogue_cover_on_date: a date, a month with none, and a day across every year", async () => {
+  const a = await call("vogue_cover_on_date", { date: "1925-06" });
+  assert.equal(images(a).length, 1);
+  assert.match(text(a), /the nearest is/);
+  const b = await call("vogue_cover_on_date", { date: "06-15" });
+  assert.ok(b.structuredContent.issues.length > 5);
+  assert.ok(images(b).length > 0 && images(b).length <= 12);
+  const late = await call("vogue_cover_on_date", { date: "1950-03" });
+  assert.equal(images(late).length, 0);
+});
+
+test("vogue_covers_by_decade: 1920s spread with images, 1940s links only", async () => {
+  const a = await call("vogue_covers_by_decade", { decade: 1920 });
+  assert.equal(images(a).length, 12);
+  const ys = a.structuredContent.covers.map((c) => c.year);
+  assert.ok(Math.min(...ys) <= 1921 && Math.max(...ys) === 1927);
+  const b = await call("vogue_covers_by_decade", { decade: 1940 });
+  assert.equal(images(b).length, 0);
+  assert.ok(b.structuredContent.link_only.length > 0);
+});
+
+test("vogue_by_season: spring 1925 and winter spanning the new year", async () => {
+  const a = await call("vogue_by_season", { season: "spring", year: 1925 });
+  for (const i of a.structuredContent.issues) assert.match(i.date, /^1925-0[345]-/);
+  const w = await call("vogue_by_season", { season: "winter", year: 1925 });
+  for (const i of w.structuredContent.issues) assert.match(i.date, /^(1925-12|1926-0[12])-/);
+});
+
+test("translate_vogue_page carries the site's French and English where it has them", async () => {
+  const r = await call("translate_vogue_page", { issue: "1920-07-01", pages: [1] });
+  assert.equal(images(r).length, 1);
+  assert.equal(r.structuredContent.transcribed, true);
+  assert.match(r.structuredContent.pages[0].english, /VOGUE/);
+  const plain = await call("translate_vogue_page", { issue: "1925", pages: [2] });
+  assert.equal(plain.structuredContent.pages[0].french, null);
+  assert.equal(images(plain).length, 1);
+});
+
+test("random_vintage_vogue_cover stays inside the public-domain years asked for", async () => {
+  const r = await call("random_vintage_vogue_cover", { from_year: 1926, to_year: 1927 });
+  assert.ok([1926, 1927].includes(r.structuredContent.issue.year));
+  assert.equal(images(r).length, 1);
+  const none = await call("random_vintage_vogue_cover", { from_year: 1940 });
+  assert.equal(none.structuredContent.found, false);
+});
+
+test("can_i_use_vogue_images: 1928 public domain, 1947 restored until 2043", async () => {
+  const a = await call("can_i_use_vogue_images", { year: 1928 });
+  assert.equal(a.structuredContent.public_domain_us, true);
+  const b = await call("can_i_use_vogue_images", { year: 1947 });
+  assert.equal(b.structuredContent.public_domain_us, false);
+  assert.equal(b.structuredContent.public_domain_from, "2043-01-01");
+  assert.match(text(b), /104A/);
+});
+
+test("high_resolution_vogue_cover gives the 2400-pixel scan, none for 1950", async () => {
+  const r = await call("high_resolution_vogue_cover", { issue: "1925" });
+  assert.match(r.structuredContent.full_scan_url, /\/w2400\/p\d{3}\.webp/);
+  const late = await call("high_resolution_vogue_cover", { issue: "1950" });
+  assert.equal(late.structuredContent.full_scan_url, null);
+});
+
+test("an unknown tool name is logged as attempted", async () => {
+  sent.length = 0;
+  await rpc("tools/call", { name: "search_vogue_text!", arguments: {} }, { "x-vpm-test": "1" });
+  const e = sent.map((b) => JSON.parse(b)).find((x) => x.properties.tool === "unknown");
+  assert.equal(e.properties.attempted, "search_vogue_text");
 });
