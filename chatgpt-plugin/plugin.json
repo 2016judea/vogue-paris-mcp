@@ -1,0 +1,117 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "paris-fashion-archive",
+  "version": "1.0.0",
+  "description": "Our own page-by-page reader of the 1920-1954 issues of Vogue Paris that the Bibliothèque nationale de France digitised on Gallica, with every scan credited \"Source: gallica.bnf.fr / BnF\". Find issues by year, month, season or date, see the covers and pages of every issue from 1930 and earlier (US public domain), and have the French read and translated. For later issues, still under US copyright, it returns the details and a reader link instead of images. Independent; not affiliated with Condé Nast or Vogue, nor with the BnF.",
+  "author": {
+    "name": "Brick and Mortar AI LLC",
+    "url": "https://vogue-paris-mcp.vercel.app/"
+  },
+  "homepage": "https://vogue-paris-mcp.vercel.app/",
+  "license": "LicenseRef-All-Rights-Reserved",
+  "keywords": [
+    "fashion history",
+    "vintage magazines",
+    "1920s fashion",
+    "Paris",
+    "Gallica",
+    "public domain",
+    "art deco"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Paris Fashion Archive",
+        "shortDescription": "1920s Paris fashion scans",
+        "longDescription": "Our own page-by-page reader of the 1920-1954 issues of Vogue Paris that the Bibliothèque nationale de France digitised on Gallica, with every scan credited \"Source: gallica.bnf.fr / BnF\". Find issues by year, month, season or date, see the covers and pages of every issue from 1930 and earlier (US public domain), and have the French read and translated. For later issues, still under US copyright, it returns the details and a reader link instead of images. Independent; not affiliated with Condé Nast or Vogue, nor with the BnF.",
+        "developerName": "Brick and Mortar AI LLC",
+        "category": "Lifestyle",
+        "capabilities": [],
+        "websiteURL": "https://vogue-paris-mcp.vercel.app/",
+        "supportURL": "https://brickandmortar.dev/contact",
+        "privacyPolicyURL": "https://vogue-paris-mcp.vercel.app/privacy",
+        "termsOfServiceURL": "https://brickandmortar.dev/license/",
+        "defaultPrompt": [
+          "Show me the Vogue Paris covers from 1925",
+          "What was on the cover the month I was born in 1926?",
+          "Translate the first pages of the June 1920 issue"
+        ],
+        "logo": "./assets/logo.png",
+        "composerIcon": "./assets/composer-icon.png",
+        "composerIconDark": "./assets/composer-icon-dark.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "List the issues of one year",
+              "prompt": "Which issues of Vogue Paris came out in 1925?",
+              "tools_triggered": [
+                "find_issues"
+              ],
+              "expected_behavior": "Calls find_issues and lists the 1925 issues with their dates, page counts and reader links, shown in full."
+            },
+            {
+              "description": "See public-domain covers",
+              "prompt": "Show me the Vogue Paris covers from 1925.",
+              "tools_triggered": [
+                "look_at_covers"
+              ],
+              "expected_behavior": "Calls look_at_covers and shows the 1925 cover images (US public domain) with each issue's reader link and the Gallica / BnF credit."
+            },
+            {
+              "description": "A cover on a date",
+              "prompt": "What was on the cover of Vogue Paris in April 1926?",
+              "tools_triggered": [
+                "vogue_cover_on_date"
+              ],
+              "expected_behavior": "Calls vogue_cover_on_date and shows the nearest issue's cover (1 April 1926) with its reader link."
+            },
+            {
+              "description": "Copyright status of a year",
+              "prompt": "Can I use 1925 Vogue Paris covers in a print?",
+              "tools_triggered": [
+                "can_i_use_vogue_images"
+              ],
+              "expected_behavior": "Calls can_i_use_vogue_images and says 1925 issues are in the US public domain since 1 January 2021 under 17 U.S.C. 304, with the Gallica credit to give, and notes it covers US law only."
+            },
+            {
+              "description": "Read and translate a page",
+              "prompt": "Translate the first pages of the June 1920 issue.",
+              "tools_triggered": [
+                "translate_vogue_page"
+              ],
+              "expected_behavior": "Calls translate_vogue_page, receives the French page images (and text where available) for the 15 June 1920 issue, and translates what is on them into English."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Current magazine",
+              "prompt": "What's in this month's issue of Vogue?",
+              "expected_behavior": "Does not call Paris Fashion Archive for current issues; the archive covers 1920-1954 only, and the assistant says so."
+            },
+            {
+              "description": "Generating imitation art",
+              "prompt": "Generate a new fake 1920s Vogue cover with my face on it.",
+              "expected_behavior": "Does not call the tools to generate images; the archive returns only the BnF's real scans."
+            },
+            {
+              "description": "Images of a copyrighted year",
+              "prompt": "Show me the full pages of the 1948 issues.",
+              "expected_behavior": "If a tool is called it returns the issue details and a reader link but no images, because 1948 issues are still under US copyright; the assistant explains this and gives the link."
+            }
+          ]
+        },
+        "demo_recording_url": "https://vogue-paris-mcp.vercel.app/demo/chatgpt",
+        "commerce": false,
+        "commerce_description": "No purchase or payment happens in ChatGPT, and no tool offers, prices or links to one."
+      },
+      "publication": {
+        "countries": [
+          "US"
+        ],
+        "release_notes": "First ChatGPT release: ten read-only tools over the 1920-1954 Vogue Paris issues on Gallica (find issues, covers and pages for public-domain years, translation, copyright status)."
+      }
+    }
+  }
+}

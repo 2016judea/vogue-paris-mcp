@@ -21,16 +21,26 @@ a{color:var(--rose)} p.m{color:var(--muted);font-size:14px}
 <body>
 <main>
 <h1>Privacy</h1>
-<p class="m">Last updated November 20, 2026. Paris Fashion Archive, by Brick and Mortar AI LLC, Saint Paul, Minnesota. Independent; not affiliated with Condé Nast or Vogue.</p>
-<h2>No account, nothing stored</h2>
-<p>The connector needs no sign-in. It receives only what the assistant sends it: a year, a date range, an issue date or page numbers. It does not receive your conversation, and it keeps nothing.</p>
+<p class="m">Last updated November 22, 2026. Paris Fashion Archive is run by Brick and Mortar AI LLC, Saint Paul, Minnesota, which is responsible for the connector and these pages. Independent; not affiliated with Condé Nast or Vogue, nor with the Bibliothèque nationale de France.</p>
+<h2>What the connector receives</h2>
+<p>The connector needs no sign-in. It receives only what your assistant (Claude, ChatGPT or another app) sends it: a year, a date range, an issue date or page numbers. It does not receive your conversation, your name, your email or your account with that app.</p>
+<h2>What it does with it</h2>
+<p>It looks up the issue, returns its details and, for issues in the US public domain, the scan. The request is then dropped. Nothing you send is stored, used to train any model, sold or shared. No model runs on our side.</p>
 <h2>What is counted</h2>
-<p>Each tool call sends one anonymous event to PostHog: which tool, whether it worked, how long it took, the year asked about, how many issues and images came back, and which app made the call (Claude, ChatGPT and so on, read from the user agent). Each event gets a random ID, so calls can't be linked to each other or to a person. No IP address is stored with it.</p>
+<p>Each tool call sends one anonymous event to PostHog: which tool, whether it worked, how long it took, the year asked about, how many issues and images came back, and which app made the call (Claude, ChatGPT and so on, read from the user agent). Each event gets a random ID, so calls can't be linked to each other or to a person. No IP address is stored with it. These events are kept while the connector runs, to see which tools are used and which fail.</p>
 <p>These pages use Vercel Web Analytics, which counts visits without cookies.</p>
+<h2>Who else handles it</h2>
+<p>Vercel hosts the connector and these pages and keeps short-lived request logs (time, path, IP address) under its own privacy policy. PostHog stores the counts above. Nothing is shared with anyone else, and nothing is sold.</p>
 <h2>Where the images come from</h2>
-<p>Covers and pages are scans from Gallica, the Bibliothèque nationale de France's digital library, served from <a href="https://vogue-paris.vercel.app">vogue-paris.vercel.app</a>. Images are returned only for issues in the US public domain. Later issues get a link instead.</p>
+<p>Covers and pages are the BnF's own scans from Gallica, its digital library, which our reader at <a href="https://vogue-paris.vercel.app">vogue-paris.vercel.app</a> serves page by page, each credited "Source: gallica.bnf.fr / BnF". Images are returned only for issues in the US public domain (1930 and earlier). Later issues get the details and a link instead. The connector sends nothing about you to the BnF.</p>
+<h2>Your choices</h2>
+<p>You can disconnect the connector in your app's settings at any time. Because nothing kept here identifies you, there is no personal data held to access, export or delete; write to us if you want that confirmed.</p>
+<h2>Children</h2>
+<p>The connector is not directed at children under 13 and does not knowingly receive their information.</p>
+<h2>Changes</h2>
+<p>If this policy changes, the date at the top changes with it.</p>
 <h2>Contact</h2>
-<p>aidan@brickandmortar.dev</p>
+<p>Questions or privacy requests: <a href="https://brickandmortar.dev/contact">brickandmortar.dev/contact</a>.</p>
 </main>
 </body>
 </html>
