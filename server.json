@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.2016judea/paris-fashion-archive",
+  "title": "Paris Fashion Archive",
+  "description": "Find any 1920–1954 issue of Vogue Paris digitised by the BnF; see covers and pages up to 1930",
+  "version": "1.0.0",
+  "websiteUrl": "https://vogue-paris-mcp.vercel.app/",
+  "repository": {
+    "url": "https://github.com/2016judea/vogue-paris-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://vogue-paris-mcp.vercel.app/mcp"
+    }
+  ]
+}

@@ -150,3 +150,5 @@ claude.ai/directory/manage/paris-fashion-archive (approval does not publish it);
   would invite confusion, which is why the name is ours.
 - Another session may be filing in the same Chrome at the same time: address your own tab by id and use your own
   runner key (here `window.__vpm`).
+
+**Official MCP Registry (2026-11-22):** `io.github.2016judea/paris-fashion-archive` 1.0.0, remote `https://vogue-paris-mcp.vercel.app/mcp`; `.github/workflows/mcp-registry.yml` republishes on every `server.json` version bump. Check: `curl "https://registry.modelcontextprotocol.io/v0/servers?search=io.github.2016judea/paris-fashion-archive"`.
